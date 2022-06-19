@@ -32,7 +32,7 @@ class XYSimulation(XYCluster):
         self.alg = alg
         
         # Define name for ensemble
-        self.ens_name = 'xyl' + str(self.N) + 't' + str(self.name)
+        self.ens_name = 'xyl' + str(self.N) + 't' + str(self.N)
         self.ens_name += 'J' + str(self.J) + '_'
 
         # Define place to load configrations/rng states
