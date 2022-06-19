@@ -2,13 +2,10 @@
 # For number crunching
 import numpy as np
 
-# For save configurations
+# For loading/saving configurations/rng states
 import pickle as pickle
 
 """ Import local modules """
-# For metropolis-hastings update
-from metrop_hast import *
-
 # For cluster update
 from cluster import *
 
