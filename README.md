@@ -1,2 +1,2 @@
-# xy_model_sim
-Python code for simple Monte Carlo simulation of XY model
+# XY Model with Python
+Simulation of XY model. Code currently in development and not stable.
