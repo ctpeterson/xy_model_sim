@@ -4,9 +4,11 @@ import numpy as np
 
 """ Cluster class """
 class XYCluster(object):
-    """Do cluster upadate
+    """Cluster update class.
     
-    Do cluster update
+    Class implements cluster update according to algorithm
+    in Phys. Rev. Lett. 62, 361 ("Collective Monte Carlo 
+    Updating for Spin Systems", Ulli Wolf)
 
     Attributes:
     """
@@ -18,7 +20,9 @@ class XYCluster(object):
     def __grow_cluster(self, site):
         """Grows cluster
 
-        Recursively grows cluster
+        Recursively grows cluster. Recursion implemented as "depth-first"
+        according to pseudocode found in lecture series by Kari Rummukainen: 
+        -  https://www.mv.helsinki.fi/home/rummukai/simu/
 
         Attributes:
            lat_vec_site (array): Lattice vector at this site
