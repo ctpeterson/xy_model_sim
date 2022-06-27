@@ -1,5 +1,5 @@
 """ Import modules """
-from sim_import import *
+from sim_imports import *
 
 """ Lattice Class """
 class XYLattice(object):

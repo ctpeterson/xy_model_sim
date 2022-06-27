@@ -11,3 +11,6 @@ from cluster import *
 
 # For creating lattice sites
 from xy_lattice import *
+
+# For measuring observables on lattice
+from xy_meas import *

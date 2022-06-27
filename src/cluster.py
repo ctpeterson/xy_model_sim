@@ -3,7 +3,7 @@
 import numpy as np
 
 """ Cluster class """
-class XYCluster(object):
+class XYCluster:
     """Cluster update class.
     
     Class implements cluster update according to algorithm
@@ -13,6 +13,10 @@ class XYCluster(object):
     Attributes:
     """
     def __init__(self):
+        """ Give user information """
+        # Print outout to user
+        print('Cluster update class initialized.')
+        
         # Return nothing
         return None
 
@@ -81,10 +85,11 @@ class XYCluster(object):
         return None
 
     """ Public methods """
-    def cluster_update(self, save = False, prnt = False, log = False):
+    def cluster_update(self, site = None, save = False,
+                       prnt = False, log = False):
         """Implement cluster update
         
-        Implement cluseter update
+        Implement cluster update
 
         Attributes:
            site (int): Random site to start cluster
@@ -93,10 +98,10 @@ class XYCluster(object):
         
         """ Initial tasks """
         # Print separator if requested
-        print(50 * '-.' + '\n') if prnt is True else None
+        print(25 * '-.' + '\n') if prnt is True else None
         
         # Sample a random site
-        site = self._rand_site()
+        site = self._rand_site() if site is None else site
         
         # Sample a random angle
         angle = self._rand_angle()
@@ -131,7 +136,7 @@ class XYCluster(object):
                   str(angle) + ', cluster')
 
             # Create final separator
-            print('\n' + 50 * '-.')
+            print('\n' + 25 * '-.')
 
         """ Option to log info to be added """
         

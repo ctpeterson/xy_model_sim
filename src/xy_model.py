@@ -2,7 +2,7 @@
 from sim_imports import *
 
 """ XY Model Class """
-class XYSimulation(XYCluster):
+class XYSimulation(XYCluster, XYMeas):
     """Performs XY simulation
 
     Class implements simulation of Ising model
@@ -15,8 +15,14 @@ class XYSimulation(XYCluster):
                  start = None, alg = 'cluster',
                  load_loc = './', save_loc = './'):
         """ Initialize class """
-        # Initialize cluster update
-        super().__init__()
+        # Create first separator
+        print('\n' + 25 * '--' + '\n')
+        
+        # Initialize cluster update class
+        XYCluster.__init__(self)
+
+        # Initialize measurement class
+        XYMeas.__init__(self)
         
         """ Set initial variables """
          # Set coupling
@@ -35,6 +41,9 @@ class XYSimulation(XYCluster):
         self.ens_name = 'xyl' + str(self.N) + 't' + str(self.N)
         self.ens_name += 'J' + str(self.J) + '_'
 
+        # Replace any periods with 'p'
+        self.ens_name = self.ens_name.replace('.', 'p')
+        
         # Define place to load configrations/rng states
         self.load_loc = load_loc
 
@@ -42,9 +51,6 @@ class XYSimulation(XYCluster):
         self.save_loc = save_loc
 
         """ Print out some information """
-        # Create first separator
-        print('\n' + 50 * '--' + '\n')
-
         # Tell user ensemble name
         print('Ensemble name:', self.ens_name.strip('_'))
 
@@ -61,8 +67,8 @@ class XYSimulation(XYCluster):
         # Check if seeds is None
         if seeds is None:
             # Set default seeds
-            self.seeds = {'sites' : 'def_sts', 'angles' : 'def_angs',
-                          'probabilities' : 'def_prbs', 'start' : 'def_start'}
+            self.seeds = {'start' : 0, 'angles' : 1,
+                          'probabilities' : 2, 'sites' : 3}
         else: # Otherwise, set to user specification
             # Set to specification
             self.seeds = seeds
@@ -76,7 +82,7 @@ class XYSimulation(XYCluster):
         self.__setup_lattice(config, start)
 
         # Create last separator
-        print('\n' + 50 * '--' + '\n')
+        print('\n' + 25 * '--' + '\n')
         
         # Return nothing
         return None
@@ -112,7 +118,7 @@ class XYSimulation(XYCluster):
         # Return random number between zero and one
         return self._prob_rng.uniform(0., 1.)
 
-    def _init_rngs(self):
+    def _init_rngs(self, prnt = True):
         """Initializes RNG random states
 
         Initializes RNG random states
@@ -131,11 +137,13 @@ class XYSimulation(XYCluster):
         self._prob_rng = np.random.RandomState(seed = self.seeds['probabilities'])
 
         """ Extra information """
-        # Cycle through seed keys
-        for key in self.seeds.keys():
-            # Print out name of seed
-            print('Initializd ' + key + ' state w/',
-                  self.seeds[key] + ' string')
+        # Check if print is true
+        if prnt is True:
+            # Cycle through seed keys
+            for key in self.seeds.keys():
+                # Print out name of seed
+                print('Initialized ' + key + ' state w/',
+                      str(self.seeds[key]) + ' integer')
         
         # Return nothing
         return None
@@ -205,7 +213,7 @@ class XYSimulation(XYCluster):
 
         """ General information """
         # Create configuration name
-        full_conf_name = self.ens_name + alg + '.' + str(self.conf_num)
+        full_conf_name = self.ens_name + self.alg + '.' + str(self.conf_num)
         
         """ Grab lattice configuration """
         # Define lattice name
@@ -228,7 +236,7 @@ class XYSimulation(XYCluster):
         rng_name = self.load_loc + full_conf_name + '.rng'
 
         # Initialize RNG states (a bit redundant)
-        self._init_rngs()
+        self._init_rngs(prnt = False)
         
         # Open file containing information about lattice
         with open(rng_name, 'rb') as in_file:
@@ -317,6 +325,9 @@ class XYSimulation(XYCluster):
             # Setup lattice
             self._setup_init_lattice(start)
         else: # Otherwise, pick up last location
+            # Set config number
+            self.conf_num = config
+            
             # Load configuration
             self._get_conf()
         
