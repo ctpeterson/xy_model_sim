@@ -44,30 +44,36 @@ class XYCluster:
         lat_vec_site = self.lattice[site].lat_vec
 
         # Temporarily store dot product
-        dt_prd_st_rfl = np.dot(lat_vec_site, self.refl_dir)
+        dt_prd_st = np.dot(lat_vec_site, self.refl_dir)
 
         """ Flip value at site """
         # Define reflected spin
-        refl_spin = lat_vec_site - 2. * dt_prd_st_rfl * self.refl_dir
+        refl_spin = lat_vec_site - 2. * dt_prd_st * self.refl_dir
                 
         # Save reflected spin
         self.lattice[site].set_new_lat_vec(refl_spin)
-        
+
+        # Add site to cluster
+        self.cluster_sites.append(site)
+
         """ Add neighbors to cluster """
+        # Get neighbors
+        nghbrs = self.lattice[site].lat_neighbors
+
         # Cycle through neighbors
-        for nghbr_site in self.lattice[site].lat_neighbors:
+        for nghbr_site in [nghbr for nghbr in nghbrs if nghbr not in self.cluster_sites]:
             """ Calculate a few things """
             # Temporarily store lattice vector of neighbor
             lat_vec_nhbr = self.lattice[nghbr_site].lat_vec
 
             # Temporarily store dot product
-            dt_prd_nghbr_rfl = np.dot(lat_vec_nhbr, self.refl_dir)
+            dt_prd_nghbr = np.dot(lat_vec_nhbr, self.refl_dir)
             
             # Get product of spin dot products
-            spin_prod = dt_prd_st_rfl * dt_prd_nghbr_rfl
+            spin_prod = dt_prd_st * dt_prd_nghbr
             
             # Get minimum of 0 and change in energy
-            min_of_change = min(0., -2. * self.J * spin_prod)
+            min_of_change = min(0., 2. * self.J * spin_prod)
 
             """ Do acc./rej. step """
             # Generate random number between 0 and 1
@@ -107,6 +113,9 @@ class XYCluster:
         angle = self._rand_angle()
 
         """ Get direction of reflection and grow cluster """
+        # Initialize list of cluster sites
+        self.cluster_sites = []
+
         # Create lattice vector representing reflection
         self.refl_dir = np.array([np.cos(angle), np.sin(angle)])
         
@@ -134,6 +143,9 @@ class XYCluster:
             # Print information about site and random angle
             print('site, angle, alg = ' + str(site) + ',', 
                   str(angle) + ', cluster')
+
+            # Print cluster size
+            print('Cluster size:', len(self.cluster_sites))
 
             # Create final separator
             print('\n' + 25 * '-.')
