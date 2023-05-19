@@ -35,7 +35,7 @@ class XYMeas:
         dot_y = np.dot(self.lattice[site].lat_vec, self.lattice[next_Y].lat_vec)
         
         # Return local energy
-        return dot_x + dot_y
+        return 2. - dot_x - dot_y
     
     def energ(self):
         """Measure energy
@@ -46,8 +46,7 @@ class XYMeas:
         """
 
         # Calculate energy
-        self.energy = -self.J * sum(self.meas_loc_energ(site)
-                                    for site in range(self.size))
+        self.energy = self.J * sum(self.meas_loc_energ(site) for site in range(self.size))
         
         # Return Nothing
         return None
