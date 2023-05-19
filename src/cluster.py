@@ -73,7 +73,7 @@ class XYCluster:
             spin_prod = dt_prd_st * dt_prd_nghbr
             
             # Get minimum of 0 and change in energy
-            min_of_change = min(0., 2. * self.J * spin_prod)
+            min_of_change = min(0., -2. * self.J * spin_prod)
 
             """ Do acc./rej. step """
             # Generate random number between 0 and 1
